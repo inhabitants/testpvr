@@ -207,13 +207,6 @@ export default function DashboardPage() {
                                 <span className="text-sm font-mono">Ethereum</span>
                               </div>
                             </div>
-
-                            <div className="p-3 bg-gray-100 rounded-lg">
-                              <div className="flex justify-between items-center">
-                                <span className="text-sm font-medium text-gray-600">Saldo ETH</span>
-                                <span className="text-sm font-mono">{balance} ETH</span>
-                              </div>
-                            </div>
                           </div>
                         )}
                       </>
