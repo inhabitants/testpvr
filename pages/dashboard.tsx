@@ -1,7 +1,8 @@
 import React from 'react';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from "react";
-import { usePrivy, getAccessToken, useWalletClient } from "@privy-io/react-auth";
+import { usePrivy, getAccessToken, usePrivyWagmi } from "@privy-io/react-auth";
+import { useContractRead } from 'wagmi';
 import Head from "next/head";
 
 async function verifyToken() {
@@ -37,10 +38,22 @@ export default function DashboardPage() {
     linkDiscord,
     unlinkDiscord,
   } = usePrivy();
-  const { walletClient } = useWalletClient();
+  const { wallet } = usePrivyWagmi();
   const [showTokens, setShowTokens] = useState(false);
-  const [helenBalance, setHelenBalance] = useState('0');
-  const HELEN_TOKEN_ADDRESS = '0x174f6a1286C0be66C83531368113cBF95FAf17C6';
+
+  const { data: helenBalance = '0' } = useContractRead({
+    address: '0x174f6a1286C0be66C83531368113cBF95FAf17C6',
+    abi: [{
+      name: 'balanceOf',
+      type: 'function',
+      stateMutability: 'view',
+      inputs: [{ name: 'owner', type: 'address' }],
+      outputs: [{ name: 'balance', type: 'uint256' }]
+    }],
+    functionName: 'balanceOf',
+    args: [wallet?.address],
+    enabled: !!wallet?.address,
+  });
 
   useEffect(() => {
     if (ready && !authenticated) {
@@ -53,41 +66,9 @@ export default function DashboardPage() {
 
   const email = user?.email;
   const phone = user?.phone;
-  const wallet = user?.wallet;
   const googleSubject = user?.google?.subject || null;
   const twitterSubject = user?.twitter?.subject || null;
   const discordSubject = user?.discord?.subject || null;
-
-  // Função para buscar o saldo de $Helen usando o walletClient do Privy
-  const fetchHelenBalance = async (address: string) => {
-    if (!walletClient) return;
-
-    try {
-      const data = await walletClient.readContract({
-        address: HELEN_TOKEN_ADDRESS,
-        abi: [{
-          name: 'balanceOf',
-          type: 'function',
-          stateMutability: 'view',
-          inputs: [{ name: 'owner', type: 'address' }],
-          outputs: [{ name: 'balance', type: 'uint256' }]
-        }],
-        functionName: 'balanceOf',
-        args: [address]
-      });
-
-      setHelenBalance(data.toString());
-    } catch (error) {
-      console.error('Erro ao buscar saldo:', error);
-      setHelenBalance('0');
-    }
-  };
-
-  useEffect(() => {
-    if (wallet?.address && walletClient) {
-      fetchHelenBalance(wallet.address);
-    }
-  }, [wallet?.address, walletClient]);
 
   return (
     <>
@@ -240,7 +221,7 @@ export default function DashboardPage() {
                             <div className="p-3 bg-gray-100 rounded-lg">
                               <div className="flex justify-between items-center">
                                 <span className="text-sm font-medium text-gray-600">$Helen Balance</span>
-                                <span className="text-sm font-mono">{helenBalance} HELEN</span>
+                                <span className="text-sm font-mono">{helenBalance?.toString()} HELEN</span>
                               </div>
                             </div>
                           </div>
