@@ -1,8 +1,6 @@
-import React from 'react';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from "react";
-import { usePrivy, getAccessToken, usePrivyWagmi } from "@privy-io/react-auth";
-import { useContractRead } from 'wagmi';
+import { usePrivy, getAccessToken } from "@privy-io/react-auth";
 import Head from "next/head";
 
 async function verifyToken() {
@@ -38,7 +36,6 @@ export default function DashboardPage() {
     linkDiscord,
     unlinkDiscord,
   } = usePrivy();
-  const { wallet } = usePrivyWagmi();
   const [showTokens, setShowTokens] = useState(false);
 
   const { data: helenBalance = '0' } = useContractRead({
@@ -215,13 +212,6 @@ export default function DashboardPage() {
                               <div className="flex justify-between items-center">
                                 <span className="text-sm font-medium text-gray-600">Rede</span>
                                 <span className="text-sm font-mono">Base</span>
-                              </div>
-                            </div>
-
-                            <div className="p-3 bg-gray-100 rounded-lg">
-                              <div className="flex justify-between items-center">
-                                <span className="text-sm font-medium text-gray-600">$Helen Balance</span>
-                                <span className="text-sm font-mono">{helenBalance?.toString()} HELEN</span>
                               </div>
                             </div>
                           </div>
