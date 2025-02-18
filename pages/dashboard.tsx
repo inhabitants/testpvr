@@ -115,29 +115,63 @@ export default function DashboardPage() {
 
                 {/* Card Wallet */}
                 <div className="bg-gray-50 rounded-xl p-4 border border-gray-200">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-3">
-                      <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
-                        <path d="M4 4a2 2 0 00-2 2v1h16V6a2 2 0 00-2-2H4z" />
-                        <path fillRule="evenodd" d="M18 9H2v5a2 2 0 002 2h12a2 2 0 002-2V9zM4 13a1 1 0 011-1h1a1 1 0 110 2H5a1 1 0 01-1-1z" clipRule="evenodd" />
-                      </svg>
-                      <span className="font-medium">Carteira</span>
+                  <div className="flex flex-col gap-2">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-3">
+                        <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+                          <path d="M4 4a2 2 0 00-2 2v1h16V6a2 2 0 00-2-2H4z" />
+                          <path fillRule="evenodd" d="M18 9H2v5a2 2 0 002 2h12a2 2 0 002-2V9zM4 13a1 1 0 011-1h1a1 1 0 110 2H5a1 1 0 01-1-1z" clipRule="evenodd" />
+                        </svg>
+                        <span className="font-medium">Carteira</span>
+                      </div>
+                      {wallet ? (
+                        <button
+                          onClick={() => unlinkWallet(wallet.address)}
+                          className="text-red-600 hover:text-red-700 text-sm font-medium disabled:text-gray-400"
+                          disabled={!canRemoveAccount}
+                        >
+                          Desconectar
+                        </button>
+                      ) : (
+                        <button
+                          onClick={linkWallet}
+                          className="text-violet-600 hover:text-violet-700 text-sm font-medium"
+                        >
+                          Conectar
+                        </button>
+                      )}
                     </div>
-                    {wallet ? (
-                      <button
-                        onClick={() => unlinkWallet(wallet.address)}
-                        className="text-red-600 hover:text-red-700 text-sm font-medium disabled:text-gray-400"
-                        disabled={!canRemoveAccount}
-                      >
-                        Desconectar
-                      </button>
-                    ) : (
-                      <button
-                        onClick={linkWallet}
-                        className="text-violet-600 hover:text-violet-700 text-sm font-medium"
-                      >
-                        Conectar
-                      </button>
+                    
+                    {/* Endereço da Wallet com botão de copiar */}
+                    {wallet && (
+                      <div className="flex items-center gap-2 mt-2 bg-gray-100 rounded-lg p-2">
+                        <span className="text-sm text-gray-600 font-mono truncate">
+                          {wallet.address}
+                        </span>
+                        <button
+                          onClick={() => {
+                            navigator.clipboard.writeText(wallet.address);
+                            // Opcional: Adicionar um feedback visual
+                            alert('Endereço copiado!');
+                          }}
+                          className="p-1 hover:bg-gray-200 rounded-md transition-colors"
+                          title="Copiar endereço"
+                        >
+                          <svg 
+                            className="w-4 h-4 text-gray-600" 
+                            fill="none" 
+                            stroke="currentColor" 
+                            viewBox="0 0 24 24"
+                          >
+                            <path 
+                              strokeLinecap="round" 
+                              strokeLinejoin="round" 
+                              strokeWidth={2} 
+                              d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" 
+                            />
+                          </svg>
+                        </button>
+                      </div>
                     )}
                   </div>
                 </div>
