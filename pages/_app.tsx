@@ -43,8 +43,19 @@ function MyApp({ Component, pageProps }: AppProps) {
       <PrivyProvider
         appId={process.env.NEXT_PUBLIC_PRIVY_APP_ID || ""}
         config={{
-          embeddedWallets: {
-            createOnLogin: "all-users",
+          loginMethods: ['email', 'wallet', 'twitter', 'discord', 'google'],
+          appearance: {
+            theme: 'light',
+            accentColor: '#696FFD',
+          },
+          fundingMethodConfig: { 
+            moonpay: { 
+              paymentMethod: 'credit_debit_card',
+              uiConfig: {
+                accentColor: '#696FFD',
+                theme: 'light'
+              },
+            },
           },
         }}
       >
