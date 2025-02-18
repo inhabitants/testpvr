@@ -38,20 +38,6 @@ export default function DashboardPage() {
   } = usePrivy();
   const [showTokens, setShowTokens] = useState(false);
 
-  const { data: helenBalance = '0' } = useContractRead({
-    address: '0x174f6a1286C0be66C83531368113cBF95FAf17C6',
-    abi: [{
-      name: 'balanceOf',
-      type: 'function',
-      stateMutability: 'view',
-      inputs: [{ name: 'owner', type: 'address' }],
-      outputs: [{ name: 'balance', type: 'uint256' }]
-    }],
-    functionName: 'balanceOf',
-    args: [wallet?.address],
-    enabled: !!wallet?.address,
-  });
-
   useEffect(() => {
     if (ready && !authenticated) {
       router.push("/");
@@ -63,6 +49,7 @@ export default function DashboardPage() {
 
   const email = user?.email;
   const phone = user?.phone;
+  const wallet = user?.wallet;
   const googleSubject = user?.google?.subject || null;
   const twitterSubject = user?.twitter?.subject || null;
   const discordSubject = user?.discord?.subject || null;
