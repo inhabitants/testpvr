@@ -48,15 +48,12 @@ function MyApp({ Component, pageProps }: AppProps) {
             theme: 'light',
             accentColor: '#696FFD',
           },
-          fundingMethodConfig: { 
-            moonpay: { 
-              paymentMethod: 'credit_debit_card',
-              uiConfig: {
-                accentColor: '#696FFD',
-                theme: 'light'
-              },
+          supportedChains: [
+            {
+              id: 1,
+              name: 'Ethereum',
             },
-          },
+          ],
         }}
       >
         <Component {...pageProps} />

@@ -1,7 +1,7 @@
 import React from 'react';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from "react";
-import { usePrivy, getAccessToken } from "@privy-io/react-auth";
+import { usePrivy, getAccessToken, useWalletBalance } from "@privy-io/react-auth";
 import Head from "next/head";
 
 async function verifyToken() {
@@ -36,7 +36,10 @@ export default function DashboardPage() {
     unlinkTwitter,
     linkDiscord,
     unlinkDiscord,
+    openFundingModal,
   } = usePrivy();
+  const { balance, tokens } = useWalletBalance(user?.wallet?.address);
+  const [showTokens, setShowTokens] = useState(false);
 
   useEffect(() => {
     if (ready && !authenticated) {
@@ -173,33 +176,41 @@ export default function DashboardPage() {
                           </button>
                         </div>
 
-                        {/* Opções de Funding */}
+                        {/* Opções da Wallet */}
                         <div className="mt-2 flex gap-2">
                           <button
-                            onClick={() => {
-                              // Aqui você pode implementar a lógica de funding
-                              // Usando MoonPay ou outros métodos configurados
-                            }}
-                            className="text-sm bg-violet-600 hover:bg-violet-700 text-white px-3 py-1.5 rounded-lg transition-colors duration-200 flex items-center gap-1"
-                          >
-                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-                            </svg>
-                            Adicionar Fundos
-                          </button>
-                          
-                          <button
-                            onClick={() => {
-                              // Implementar visualização detalhada de tokens
-                            }}
+                            onClick={() => setShowTokens(!showTokens)}
                             className="text-sm bg-gray-200 hover:bg-gray-300 text-gray-700 px-3 py-1.5 rounded-lg transition-colors duration-200 flex items-center gap-1"
                           >
                             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
                             </svg>
-                            Ver Tokens
+                            {showTokens ? 'Ocultar Tokens' : 'Ver Tokens'}
                           </button>
                         </div>
+
+                        {/* Visualização de Tokens */}
+                        {showTokens && (
+                          <div className="mt-4 space-y-2">
+                            <div className="p-3 bg-gray-100 rounded-lg">
+                              <div className="flex justify-between items-center">
+                                <span className="text-sm font-medium text-gray-600">Saldo ETH</span>
+                                <span className="text-sm font-mono">{balance?.formatted || '0.00'} ETH</span>
+                              </div>
+                            </div>
+                            
+                            {tokens?.map((token) => (
+                              <div key={token.address} className="p-3 bg-gray-100 rounded-lg">
+                                <div className="flex justify-between items-center">
+                                  <span className="text-sm font-medium text-gray-600">{token.symbol}</span>
+                                  <span className="text-sm font-mono">
+                                    {token.formatted} {token.symbol}
+                                  </span>
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        )}
                       </>
                     )}
                   </div>
