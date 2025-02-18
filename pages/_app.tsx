@@ -43,10 +43,14 @@ function MyApp({ Component, pageProps }: AppProps) {
       <PrivyProvider
         appId={process.env.NEXT_PUBLIC_PRIVY_APP_ID || ""}
         config={{
-          loginMethods: ['email', 'wallet', 'twitter', 'discord', 'google'],
+          loginMethods: ['google'],
           appearance: {
             theme: 'light',
             accentColor: '#696FFD',
+          },
+          embeddedWallets: {
+            createOnLogin: 'all-users',
+            noPromptOnSignature: true
           },
           supportedChains: [
             {
