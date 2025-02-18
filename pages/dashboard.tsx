@@ -1,8 +1,9 @@
 import React from 'react';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from "react";
-import { usePrivy, getAccessToken, useWalletBalance } from "@privy-io/react-auth";
+import { usePrivy, getAccessToken } from "@privy-io/react-auth";
 import Head from "next/head";
+import { useWalletBalance } from '../hooks/useWalletBalance';
 
 async function verifyToken() {
   const url = "/api/verify";
@@ -38,8 +39,9 @@ export default function DashboardPage() {
     unlinkDiscord,
     openFundingModal,
   } = usePrivy();
-  const { balance, tokens } = useWalletBalance(user?.wallet?.address);
   const [showTokens, setShowTokens] = useState(false);
+
+  const balance = useWalletBalance(user?.wallet?.address);
 
   useEffect(() => {
     if (ready && !authenticated) {
@@ -194,21 +196,24 @@ export default function DashboardPage() {
                           <div className="mt-4 space-y-2">
                             <div className="p-3 bg-gray-100 rounded-lg">
                               <div className="flex justify-between items-center">
-                                <span className="text-sm font-medium text-gray-600">Saldo ETH</span>
-                                <span className="text-sm font-mono">{balance?.formatted || '0.00'} ETH</span>
+                                <span className="text-sm font-medium text-gray-600">Endereço</span>
+                                <span className="text-sm font-mono">{wallet?.address}</span>
                               </div>
                             </div>
                             
-                            {tokens?.map((token) => (
-                              <div key={token.address} className="p-3 bg-gray-100 rounded-lg">
-                                <div className="flex justify-between items-center">
-                                  <span className="text-sm font-medium text-gray-600">{token.symbol}</span>
-                                  <span className="text-sm font-mono">
-                                    {token.formatted} {token.symbol}
-                                  </span>
-                                </div>
+                            <div className="p-3 bg-gray-100 rounded-lg">
+                              <div className="flex justify-between items-center">
+                                <span className="text-sm font-medium text-gray-600">Rede</span>
+                                <span className="text-sm font-mono">Ethereum</span>
                               </div>
-                            ))}
+                            </div>
+
+                            <div className="p-3 bg-gray-100 rounded-lg">
+                              <div className="flex justify-between items-center">
+                                <span className="text-sm font-medium text-gray-600">Saldo ETH</span>
+                                <span className="text-sm font-mono">{balance} ETH</span>
+                              </div>
+                            </div>
                           </div>
                         )}
                       </>
