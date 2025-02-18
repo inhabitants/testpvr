@@ -1,22 +1,10 @@
-import { useRouter } from "next/router";
+import React from 'react';
+import { useRouter } from 'next/navigation';
 import { useEffect, useState } from "react";
-import { getAccessToken, usePrivy } from "@privy-io/react-auth";
+import { usePrivy } from "@privy-io/react-auth";
 import Head from "next/head";
 
-async function verifyToken() {
-  const url = "/api/verify";
-  const accessToken = await getAccessToken();
-  const result = await fetch(url, {
-    headers: {
-      ...(accessToken ? { Authorization: `Bearer ${accessToken}` } : undefined),
-    },
-  });
-
-  return await result.json();
-}
-
 export default function DashboardPage() {
-  const [verifyResult, setVerifyResult] = useState();
   const router = useRouter();
   const {
     ready,
