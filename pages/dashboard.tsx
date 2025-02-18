@@ -3,7 +3,6 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useState } from "react";
 import { usePrivy, getAccessToken } from "@privy-io/react-auth";
 import Head from "next/head";
-import { useWalletBalance } from '../hooks/useWalletBalance';
 
 async function verifyToken() {
   const url = "/api/verify";
@@ -41,14 +40,6 @@ export default function DashboardPage() {
   } = usePrivy();
   const [showTokens, setShowTokens] = useState(false);
 
-  const balance = useWalletBalance(user?.wallet?.address);
-
-  useEffect(() => {
-    if (ready && !authenticated) {
-      router.push("/");
-    }
-  }, [ready, authenticated, router]);
-
   const numAccounts = user?.linkedAccounts?.length || 0;
   const canRemoveAccount = numAccounts > 1;
 
@@ -59,6 +50,12 @@ export default function DashboardPage() {
   const googleSubject = user?.google?.subject || null;
   const twitterSubject = user?.twitter?.subject || null;
   const discordSubject = user?.discord?.subject || null;
+
+  useEffect(() => {
+    if (ready && !authenticated) {
+      router.push("/");
+    }
+  }, [ready, authenticated, router]);
 
   return (
     <>
