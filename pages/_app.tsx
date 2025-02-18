@@ -49,8 +49,7 @@ function MyApp({ Component, pageProps }: AppProps) {
             accentColor: '#696FFD',
           },
           embeddedWallets: {
-            createOnLogin: 'all-users',
-            noPromptOnSignature: true
+            createOnLogin: 'all-users'
           },
           supportedChains: [
             {
