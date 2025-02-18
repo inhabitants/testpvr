@@ -50,19 +50,19 @@ function MyApp({ Component, pageProps }: AppProps) {
           },
           supportedChains: [
             {
-              id: 1,
-              name: 'Ethereum',
+              id: 8453,  // Base Mainnet
+              name: 'Base',
               nativeCurrency: {
-                name: 'Ether',
+                name: 'Ethereum',
                 symbol: 'ETH',
                 decimals: 18
               },
               rpcUrls: {
                 default: {
-                  http: ['https://eth.llamarpc.com']
+                  http: ['https://mainnet.base.org']
                 },
                 public: {
-                  http: ['https://eth.llamarpc.com']
+                  http: ['https://mainnet.base.org']
                 }
               }
             },

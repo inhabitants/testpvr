@@ -199,7 +199,7 @@ export default function DashboardPage() {
                             <div className="p-3 bg-gray-100 rounded-lg">
                               <div className="flex justify-between items-center">
                                 <span className="text-sm font-medium text-gray-600">Rede</span>
-                                <span className="text-sm font-mono">Ethereum</span>
+                                <span className="text-sm font-mono">Base</span>
                               </div>
                             </div>
                           </div>
